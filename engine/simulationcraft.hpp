@@ -1139,24 +1139,6 @@ inline option_t opt_null()
 
 // Utilities ================================================================
 
-#ifdef _MSC_VER
-// C99-compliant snprintf - MSVC _snprintf is NOT the same.
-
-#undef vsnprintf
-int vsnprintf_simc( char* buf, size_t size, const char* fmt, va_list ap );
-#define vsnprintf vsnprintf_simc
-
-#undef snprintf
-inline int snprintf( char* buf, size_t size, const char* fmt, ... )
-{
-  va_list ap;
-  va_start( ap, fmt );
-  int rval = vsnprintf( buf, size, fmt, ap );
-  va_end( ap );
-  return rval;
-}
-#endif
-
 enum stopwatch_e { STOPWATCH_CPU, STOPWATCH_WALL, STOPWATCH_THREAD };
 
 struct stopwatch_t
