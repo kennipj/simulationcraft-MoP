@@ -58,3 +58,5 @@ CMakeCache.txt
 *.ld_*
 
 casc_extract/cache/
+
+.vs
