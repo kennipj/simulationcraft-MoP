@@ -5,6 +5,7 @@
 
 #include "simulationcraft.hpp"
 #include "sc_report.hpp"
+#include <report/charts.h>
 
 namespace { // UNNAMED NAMESPACE ==========================================
 
@@ -4249,6 +4250,14 @@ namespace { // UNNAMED NAMESPACE ==========================================
 
 		print_html_styles(os, sim);
 
+		// jQuery
+		os << "\t\t<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n";
+
+		// Highcharts
+		os << "\t\t<script type=\"text/javascript\" src=\"https://code.highcharts.com/highcharts.js\"></script>\n";
+
+		os << charts::chart_options();
+
 		os.printf("\t\t<script type=\"text/javascript\">\n"
 			"\t\tfunction HighlightText(obj){\n"
 			"\t\t\tif (document.selection) {\n"
@@ -4346,10 +4355,6 @@ namespace { // UNNAMED NAMESPACE ==========================================
 
 		// Help Boxes
 		print_html_help_boxes(os, sim);
-
-		// jQuery
-		// The /1/ url auto-updates to the latest minified version
-		os << "\t\t<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n";
 
 		print_html_image_load_scripts(os, sim);
 

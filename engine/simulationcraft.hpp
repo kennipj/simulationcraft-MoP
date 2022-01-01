@@ -1383,6 +1383,7 @@ namespace util
 
 // Include IO Module
 #include "util/sc_io.hpp"
+#include <report/charts.h>
 
 // Spell information struct, holding static functions to output spell data in a human readable form
 
@@ -3923,9 +3924,22 @@ public:
 	const sc_timeline_t& timeline() const { return timeline_; }
 };
 
+
+struct player_charts
+{
+	charts::chart action_dpet;
+	charts::chart sources;
+	charts::chart time_spent;
+	charts::chart timeline_dps;
+	charts::chart dps_distribution;
+
+	player_charts() {}
+};
+
 struct player_processed_report_information_t
 {
 	bool charts_generated, buff_lists_generated;
+	player_charts charts;
 	std::string action_dpet_chart, action_dmg_chart, time_spent_chart;
 	std::array<std::string, RESOURCE_MAX> timeline_resource_chart, gains_chart;
 	std::array<std::string, STAT_MAX> timeline_stat_chart;

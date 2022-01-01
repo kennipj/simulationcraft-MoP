@@ -1914,33 +1914,29 @@ namespace { // UNNAMED NAMESPACE ==========================================
 
 	// print_html_player_charts =================================================
 
-	void print_html_player_charts(report::sc_html_stream& os, sim_t* sim, player_t* p, player_processed_report_information_t& ri)
+	void print_html_player_charts(report::sc_html_stream& os, sim_t* sim, player_t* p, player_processed_report_information_t& ri, int j)
 	{
 		size_t num_players = sim->players_by_name.size();
+		std::stringstream charts;
 
 		os << "\t\t\t\t<div class=\"player-section\">\n"
 			<< "\t\t\t\t\t<h3 class=\"toggle open\">Charts</h3>\n"
 			<< "\t\t\t\t\t<div class=\"toggle-content\">\n"
 			<< "\t\t\t\t\t\t<div class=\"charts charts-left\">\n";
 
-		if (!ri.action_dpet_chart.empty())
+
+		if (!ri.charts.action_dpet.chart_str.empty())
 		{
-			std::string chart_str;
-			if (num_players == 1)
-				chart_str = "\t\t\t\t\t\t\t<img src=\"" + ri.action_dpet_chart + "\" alt=\"Action DPET Chart\" />\n";
-			else
-				chart_str = "\t\t\t\t\t\t\t<span class=\"chart-action-dpet\" title=\"Action DPET Chart\">" + ri.action_dpet_chart + "</span>\n";
-			os << chart_str;
+			auto chart = ri.charts.action_dpet;
+			os << chart.chart_div << "\n";
+			charts << chart.chart_str << "\n";
 		}
 
-		if (!ri.action_dmg_chart.empty())
+		if (!ri.charts.sources.chart_str.empty())
 		{
-			std::string chart_str;
-			if (num_players == 1)
-				chart_str = "\t\t\t\t\t\t\t<img src=\"" + ri.action_dmg_chart + "\" alt=\"Action Damage Chart\" />\n";
-			else
-				chart_str = "\t\t\t\t\t\t\t<span class=\"chart-action-dmg\" title=\"Action Damage Chart\">" + ri.action_dmg_chart + "</span>\n";
-			os << chart_str;
+			auto chart = ri.charts.sources;
+			os << chart.chart_div << "\n";
+			charts << chart.chart_str << "\n";
 		}
 
 		if (!ri.scaling_dps_chart.empty())
@@ -2005,14 +2001,11 @@ namespace { // UNNAMED NAMESPACE ==========================================
 			os << chart_str;
 		}
 
-		if (!ri.timeline_dps_chart.empty())
+		if (!ri.charts.timeline_dps.chart_str.empty())
 		{
-			std::string chart_str;
-			if (num_players == 1)
-				chart_str = "\t\t\t\t\t\t\t<img src=\"" + ri.timeline_dps_chart + "\" alt=\"DPS Timeline Chart\" />\n";
-			else
-				chart_str = "\t\t\t\t\t\t\t<span class=\"chart-timeline-dps\" title=\"DPS Timeline Chart\">" + ri.timeline_dps_chart + "</span>\n";
-			os << chart_str;
+			auto chart = ri.charts.timeline_dps;
+			os << chart.chart_div << "\n";
+			charts << chart.chart_str << "\n";
 		}
 
 		std::string vengeance_timeline_chart = chart::timeline(p, p->vengeance_timeline().data(), "vengeance", 0, "ff0000", static_cast<size_t>(p->collected_data.fight_length.max()));
@@ -2021,24 +2014,18 @@ namespace { // UNNAMED NAMESPACE ==========================================
 			os << "<img src=\"" << vengeance_timeline_chart << "\" alt=\"Vengeance Timeline Chart\" />\n";
 		}
 
-		if (!ri.distribution_dps_chart.empty())
+		if (!ri.charts.dps_distribution.chart_str.empty())
 		{
-			std::string chart_str;
-			if (num_players == 1)
-				chart_str = "\t\t\t\t\t\t\t<img src=\"" + ri.distribution_dps_chart + "\" alt=\"DPS Distribution Chart\" />\n";
-			else
-				chart_str = "\t\t\t\t\t\t\t<span class=\"chart-distribution-dps\" title=\"DPS Distribution Chart\">" + ri.distribution_dps_chart + "</span>\n";
-			os << chart_str;
+			auto chart = ri.charts.dps_distribution;
+			os << chart.chart_div << "\n";
+			charts << chart.chart_str << "\n";
 		}
 
-		if (!ri.time_spent_chart.empty())
+		if (!ri.charts.time_spent.chart_str.empty())
 		{
-			std::string chart_str;
-			if (num_players == 1)
-				chart_str = "\t\t\t\t\t\t\t<img src=\"" + ri.time_spent_chart + "\" alt=\"Time Spent Chart\" />\n";
-			else
-				chart_str = "\t\t\t\t\t\t\t<span class=\"chart-time-spent\" title=\"Time Spent Chart\">" + ri.time_spent_chart + "</span>\n";
-			os << chart_str;
+			auto chart = ri.charts.time_spent;
+			os << chart.chart_div << "\n";
+			charts << chart.chart_str << "\n";
 		}
 
 		for (size_t i = 0; i < ri.timeline_stat_chart.size(); ++i)
@@ -2053,6 +2040,12 @@ namespace { // UNNAMED NAMESPACE ==========================================
 				os << chart_str;
 			}
 		}
+
+		os << "<script type=\"text/javascript\">\n";
+		os << "jQuery(document).ready(function($) {\n";
+		os << charts.str();
+		os << "});\n";
+		os << "</script>\n";
 
 		os << "\t\t\t\t\t\t</div>\n"
 			<< "\t\t\t\t\t\t<div class=\"clear\"></div>\n"
@@ -3155,13 +3148,15 @@ namespace { // UNNAMED NAMESPACE ==========================================
 		report::generate_player_charts(p, p->report_information);
 		report::generate_player_buff_lists(p, p->report_information);
 
+		p_charts::create_player_charts(p, j);
+
 		print_html_player_description(os, sim, p, j);
 
 		print_html_player_results_spec_gear(os, sim, p);
 
 		print_html_player_scale_factors(os, sim, p, p->report_information);
 
-		print_html_player_charts(os, sim, p, p->report_information);
+		print_html_player_charts(os, sim, p, p->report_information, j);
 
 		print_html_player_abilities(os, sim, p);
 
