@@ -2,7 +2,7 @@
 #include "sc_report.hpp"
 #include <util/json.hpp>
 #include <sstream>
-#include "charts.h";
+#include "charts.h"
 
 using json = nlohmann::json;
 
@@ -594,7 +594,7 @@ namespace p_charts
 			data.push_back(charts::chart_data_point(st->name(), charts::colors::school_color(st->school), st->apet));
 		}
 		auto chart = charts::horizontal_bar_chart("Damage per Execute Time", player->name_str, "Damage per Execute Time", data);
-		return charts::chart(525, 30 + (25 * num_stats), chart_to_js(chart.to_json().dump(), idx, "dpet"), "dpet", idx);
+		return charts::chart(525, 30 + (30 * num_stats), chart_to_js(chart.to_json().dump(), idx, "dpet"), "dpet", idx);
 	}
 
 	charts::chart _sources_chart(player_t* player, int idx)
