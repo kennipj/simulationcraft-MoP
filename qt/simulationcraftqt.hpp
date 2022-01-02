@@ -8,7 +8,7 @@
 
 #include "simulationcraft.hpp"
 #include <QtGui/QtGui>
-#include <QtWebKit/QtWebKit>
+#include <QtWebEngine/QtWebEngine>
 #include <QtCore/QTranslator>
 #include <QtNetwork/QtNetwork>
 
@@ -17,7 +17,7 @@
 #endif
 #ifdef QT_VERSION_5
 #include <QtWidgets/QtWidgets>
-#include <QtWebKitWidgets/QtWebKitWidgets>
+#include <QtWebEngineWidgets/QtWebEngineWidgets>
 #endif
 
 class SC_MainWindow;
@@ -2672,7 +2672,7 @@ public:
 // SC_WelcomeTabWidget
 // ============================================================================
 
-class SC_WelcomeTabWidget : public QWebView
+class SC_WelcomeTabWidget : public QWebEngineView
 {
   Q_OBJECT
 public:
@@ -3356,90 +3356,83 @@ public:
 // SC_WebPage
 // ============================================================================
 
-class SC_WebPage : public QWebPage
+class SC_WebPage : public QWebEnginePage
 {
   Q_OBJECT
 public:
   explicit SC_WebPage( QObject* parent = 0 ) :
-    QWebPage( parent )
+    QWebEnginePage( parent )
   {}
 
   QString userAgentForUrl( const QUrl& /* url */ ) const
   { return QString( "simulationcraft_gui" ); }
-protected:
-  virtual bool supportsExtension( Extension extension ) const
-  {
-    return extension == QWebPage::ErrorPageExtension;
-  }
-  virtual bool extension( Extension extension, const ExtensionOption* option = nullptr, ExtensionReturn* output = nullptr )
-  {
-    if ( extension != QWebPage::ErrorPageExtension )
-    {
-      return false;
-    }
+//protected:
+//  virtual bool supportsExtension( Extension extension ) const
+//  {
+//    return extension == QWebEnginePage::ErrorPageExtension;
+//  }
+//  virtual bool extension( Extension extension, const ExtensionOption* option = nullptr, ExtensionReturn* output = nullptr )
+//  {
+//    if ( extension != QWebEnginePage::ErrorPageExtension )
+//    {
+//      return false;
+//    }
 
-    const ErrorPageExtensionOption* errorOption = static_cast< const ErrorPageExtensionOption* >( option );
+//    QWebEnginePage::
 
-    QString domain;
-    switch( errorOption -> domain )
-    {
-    case QWebPage::QtNetwork:
-      domain = tr( "Network Error" );
-      break;
-    case QWebPage::WebKit:
-      domain = tr( "WebKit Error" );
-      break;
-    case QWebPage::Http:
-      domain = tr( "HTTP Error" );
-      break;
-    default:
-      domain = tr( "Unknown Error" );
-      break;
-    }
+//    const ErrorPageExtensionOption* errorOption = static_cast< const ErrorPageExtensionOption* >( option );
 
-    QString html;
-    QString errorHtmlFile = QDir::currentPath() + "/Error.html";
-#if defined( Q_WS_MAC ) || defined( Q_OS_MAC )
-    CFURLRef fileRef    = CFBundleCopyResourceURL( CFBundleGetMainBundle(), CFSTR( "Error" ), CFSTR( "html" ), 0 );
-    if ( fileRef )
-    {
-      CFStringRef macPath = CFURLCopyFileSystemPath( fileRef, kCFURLPOSIXPathStyle );
-      errorHtmlFile       = CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() );
+//    QString domain;
+//    switch( errorOption -> domain )
+//    {
+//    default:
+//      domain = tr( "Unknown Error" );
+//      break;
+//    }
 
-      CFRelease( fileRef );
-      CFRelease( macPath );
-    }
-#endif
-    QFile errorHtml( errorHtmlFile );
-    if ( errorHtml.open( QIODevice::ReadOnly | QIODevice::Text ) )
-    {
-      html = QString::fromUtf8( errorHtml.readAll() );
-      errorHtml.close();
-    }
-    else
-    {
-      // VERY simple error page if we fail to load detailed error page
-      html = "<html><head><title>Error</title></head><body><p>Failed to load <a href=\"SITE_URL\">SITE_URL</a></p><p>ERROR_DOMAIN ERROR_NUMBER: ERROR_STRING</p></body></html>";
-    }
+//    QString html;
+//    QString errorHtmlFile = QDir::currentPath() + "/Error.html";
+//#if defined( Q_WS_MAC ) || defined( Q_OS_MAC )
+//    CFURLRef fileRef    = CFBundleCopyResourceURL( CFBundleGetMainBundle(), CFSTR( "Error" ), CFSTR( "html" ), 0 );
+//    if ( fileRef )
+//    {
+//      CFStringRef macPath = CFURLCopyFileSystemPath( fileRef, kCFURLPOSIXPathStyle );
+//      errorHtmlFile       = CFStringGetCStringPtr( macPath, CFStringGetSystemEncoding() );
 
-    html = html.replace( "ERROR_NUMBER", QString::number( errorOption -> error ) );
-    html = html.replace( "ERROR_DOMAIN", domain );
-    html = html.replace( "ERROR_STRING", errorOption -> errorString );
-    html = html.replace( "SITE_URL", errorOption -> url.toString() );
+//      CFRelease( fileRef );
+//      CFRelease( macPath );
+//    }
+//#endif
+//    QFile errorHtml( errorHtmlFile );
+//    if ( errorHtml.open( QIODevice::ReadOnly | QIODevice::Text ) )
+//    {
+//      html = QString::fromUtf8( errorHtml.readAll() );
+//      errorHtml.close();
+//    }
+//    else
+//    {
+//      // VERY simple error page if we fail to load detailed error page
+//      html = "<html><head><title>Error</title></head><body><p>Failed to load <a href=\"SITE_URL\">SITE_URL</a></p><p>ERROR_DOMAIN ERROR_NUMBER: ERROR_STRING</p></body></html>";
+//    }
 
-    ErrorPageExtensionReturn* errorReturn = static_cast< ErrorPageExtensionReturn* >( output );
-    errorReturn -> content = html.toUtf8();
-    errorReturn -> contentType = "text/html";
-    errorReturn -> baseUrl = errorOption -> url;
-    return true;
-  }
+//    html = html.replace( "ERROR_NUMBER", QString::number( errorOption -> error ) );
+//    html = html.replace( "ERROR_DOMAIN", domain );
+//    html = html.replace( "ERROR_STRING", errorOption -> errorString );
+//    html = html.replace( "SITE_URL", errorOption -> url.toString() );
+
+//    ErrorPageExtensionReturn* errorReturn = static_cast< ErrorPageExtensionReturn* >( output );
+//    errorReturn -> content = html.toUtf8();
+//    errorReturn -> contentType = "text/html";
+//    errorReturn -> baseUrl = errorOption -> url;
+//    return true;
+//  }
 };
 
-// ============================================================================
-// SC_WebView
-// ============================================================================
+//// ============================================================================
+//// SC_WebView
+//// ============================================================================
 
-class SC_WebView : public QWebView
+class SC_WebView : public QWebEngineView
 {
   Q_OBJECT
   SC_SearchBox* searchBox;
@@ -3454,7 +3447,7 @@ public:
   QString url_to_show;
 
   SC_WebView( SC_MainWindow* mw, QWidget* parent = 0, const QString& h = QString() ) :
-    QWebView( parent ),
+    QWebEngineView( parent ),
     searchBox( nullptr ),
     previousSearch( "" ),
     allow_mouse_navigation( false ),
@@ -3480,7 +3473,7 @@ public:
 
     SC_WebPage* page = new SC_WebPage( this );
     setPage( page );
-    page -> setLinkDelegationPolicy( QWebPage::DelegateExternalLinks );
+    // page -> setLinkDelegationPolicy( QWebEnginePage::DelegateExternalLinks );
 
     // Add QT Major Version to avoid "mysterious" problems resulting in qBadAlloc. Qt4 and Qt5 webcache do not like each other
     QDir dir( mainWindow -> TmpDir + QDir::separator() + "simc_webcache_qt" + std::string( QT_VERSION_STR ).substr( 0, 3 ).c_str() );
@@ -3488,17 +3481,17 @@ public:
 
     QFileInfo fi( dir.absolutePath() );
 
-    if ( fi.isDir() && fi.isWritable() )
-    {
-      QNetworkDiskCache* diskCache = new QNetworkDiskCache( this );
-      diskCache -> setCacheDirectory( dir.absolutePath() );
-      QString test = diskCache -> cacheDirectory();
-      page -> networkAccessManager()->setCache( diskCache );
-    }
-    else
-    {
-      qDebug() << "Can't write webcache! sucks";
-    }
+//    if ( fi.isDir() && fi.isWritable() )
+//    {
+//      QNetworkDiskCache* diskCache = new QNetworkDiskCache( this );
+//      diskCache -> setCacheDirectory( dir.absolutePath() );
+//      QString test = diskCache -> cacheDirectory();
+//      page -> networkAccessManager()->setCache( diskCache );
+//    }
+//    else
+//    {
+//      qDebug() << "Can't write webcache! sucks";
+//    }
 
   }
   void store_html( const QString& s )
@@ -3510,10 +3503,12 @@ public:
   {
     setHtml( html_str );
   }
-  QString toHtml()
-  {
-    return page() -> currentFrame() -> toHtml();
-  }
+//  QString toHtml()
+//  {
+//    QString html;
+//    page() -> toHtml([this](const QString &result){html = result;});
+//    return html;
+//  }
   void enableMouseNavigation()
   {
     allow_mouse_navigation = true;
@@ -3554,7 +3549,7 @@ protected:
         break;
       }
     }
-    QWebView::mouseReleaseEvent( e );
+    QWebEngineView::mouseReleaseEvent( e );
   }
   virtual void keyReleaseEvent( QKeyEvent* e )
   {
@@ -3590,17 +3585,17 @@ protected:
         default: break;
       }
     }
-    QWebView::keyReleaseEvent( e );
+    QWebEngineView::keyReleaseEvent( e );
   }
   virtual void resizeEvent( QResizeEvent* e )
   {
     searchBox -> updateGeometry();
-    QWebView::resizeEvent( e );
+    QWebEngineView::resizeEvent( e );
   }
   virtual void focusInEvent( QFocusEvent* e )
   {
     hideSearchBox();
-    QWebView::focusInEvent( e );
+    QWebEngineView::focusInEvent( e );
   }
 private slots:
   void loadProgressSlot( int p )
@@ -3624,59 +3619,59 @@ public slots:
     previousSearch = ""; // disable clearing of highlighted text on next search
     searchBox -> hide();
   }
-  void findSomeText( const QString& text, QWebPage::FindFlags options )
-  {
-    if ( ! previousSearch.isEmpty() && previousSearch != text )
-    {
-      findText( "", QWebPage::HighlightAllOccurrences ); // clears previous highlighting
-    }
-    previousSearch = text;
+//  void findSomeText( const QString& text, QWebEnginePage::FindFlags options )
+//  {
+//    if ( ! previousSearch.isEmpty() && previousSearch != text )
+//    {
+//      findText( "", QWebEnginePage::HighlightAllOccurrences ); // clears previous highlighting
+//    }
+//    previousSearch = text;
 
-    if ( searchBox -> wrapSearch() )
-    {
-      options |= QWebPage::FindWrapsAroundDocument;
-    }
-    findText( text, options );
+//    if ( searchBox -> wrapSearch() )
+//    {
+//      options |= QWebEnginePage::FindWrapsAroundDocument;
+//    }
+//    findText( text, options );
 
-    // If the QWebView scrolls due to searching with the SC_SearchBox visible
-    // The SC_SearchBox could still be visible, as the area the searchbox is covering
-    // is not redrawn, just moved
-    // *HACK*
-    // This just repaints the area directly above the search box to the top, in a huge rectangle
-    QRect searchBoxRect = searchBox -> rect();
-    searchBoxRect.moveTopLeft( searchBox -> geometry().topLeft() );
-    switch( searchBox -> getCorner() )
-    {
-    case Qt::TopLeftCorner:
-    case Qt::BottomLeftCorner:
-      searchBoxRect.setTopLeft( QPoint( 0, 0 ) );
-      searchBoxRect.setBottomLeft( rect().bottomLeft() );
-      break;
-    case Qt::TopRightCorner:
-    case Qt::BottomRightCorner:
-      searchBoxRect.setTopRight( rect().topRight() );
-      searchBoxRect.setBottomRight( rect().bottomRight() );
-      break;
-    }
-    repaint( searchBoxRect );
-  }
-  void findSomeText( const QString& text )
-  {
-    QWebPage::FindFlags flags = 0;
-    if ( searchBox -> reverseSearch() )
-    {
-      flags |= QWebPage::FindBackward;
-    }
-    findSomeText( text, flags );
-  }
-  void findPrev()
-  {
-    findSomeText( searchBox -> text(), QWebPage::FindBackward );
-  }
-  void findNext()
-  {
-    findSomeText( searchBox -> text(), 0 );
-  }
+//    // If the QWebView scrolls due to searching with the SC_SearchBox visible
+//    // The SC_SearchBox could still be visible, as the area the searchbox is covering
+//    // is not redrawn, just moved
+//    // *HACK*
+//    // This just repaints the area directly above the search box to the top, in a huge rectangle
+//    QRect searchBoxRect = searchBox -> rect();
+//    searchBoxRect.moveTopLeft( searchBox -> geometry().topLeft() );
+//    switch( searchBox -> getCorner() )
+//    {
+//    case Qt::TopLeftCorner:
+//    case Qt::BottomLeftCorner:
+//      searchBoxRect.setTopLeft( QPoint( 0, 0 ) );
+//      searchBoxRect.setBottomLeft( rect().bottomLeft() );
+//      break;
+//    case Qt::TopRightCorner:
+//    case Qt::BottomRightCorner:
+//      searchBoxRect.setTopRight( rect().topRight() );
+//      searchBoxRect.setBottomRight( rect().bottomRight() );
+//      break;
+//    }
+//    repaint( searchBoxRect );
+//  }
+//  void findSomeText( const QString& text )
+//  {
+//    QWebEnginePage::FindFlags flags = 0;
+//    if ( searchBox -> reverseSearch() )
+//    {
+//      flags |= QWebEnginePage::FindBackward;
+//    }
+//    findSomeText( text, flags );
+//  }
+//  void findPrev()
+//  {
+//    findSomeText( searchBox -> text(), QWebEnginePage::FindBackward );
+//  }
+//  void findNext()
+//  {
+//    findSomeText( searchBox -> text(), 0 );
+//  }
 };
 
 // ============================================================================

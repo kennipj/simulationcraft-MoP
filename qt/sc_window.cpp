@@ -9,7 +9,6 @@
 #ifdef SC_PAPERDOLL
 #include "simcpaperdoll.hpp"
 #endif
-#include <QtWebKit/QtWebKit>
 #if defined( Q_WS_MAC ) || defined( Q_OS_MAC )
 #include <CoreFoundation/CoreFoundation.h>
 #endif
@@ -493,7 +492,7 @@ void SC_MainWindow::createOptionsTab()
 }
 
 SC_WelcomeTabWidget::SC_WelcomeTabWidget( SC_MainWindow* parent ) :
-  QWebView( parent )
+  QWebEngineView( parent )
 {
   QString welcomeFile = QDir::currentPath() + "/Welcome.html";
 
@@ -1615,11 +1614,7 @@ void SC_MainWindow::backButtonClicked( bool /* checked */ )
     if ( mainTab -> currentTab() == TAB_RESULTS && ! visibleWebView->history()->canGoBack() )
     {
       visibleWebView -> loadHtml();
-
-      QWebHistory* h = visibleWebView->history();
       visibleWebView->history()->clear(); // This is not appearing to work.
-      h->setMaximumItemCount( 0 );
-      h->setMaximumItemCount( 100 );
     }
     else
     {
@@ -2093,7 +2088,7 @@ void SC_SingleResultTab::save_result()
       switch ( currentTab() )
       {
       case TAB_HTML:
-        file.write( static_cast<SC_WebView*>( currentWidget() ) -> toHtml().toUtf8() );
+//        file.write( static_cast<SC_WebView*>( currentWidget() ) -> toHtml().toUtf8() );
         break;
       case TAB_TEXT:
       case TAB_XML:
