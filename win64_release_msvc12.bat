@@ -24,44 +24,15 @@ set redist="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Mi
 rd %install% /s /q
 :: Copying new dlls
 
-xcopy %qt_dir%\plugins\imageformats %install%\imageformats\
-xcopy %redist%\msvcp140.dll %install%\
-:: xcopy %redist%\msvcr120.dll %install%\
-xcopy %redist%\vccorlib140.dll %install%\
-xcopy %qt_dir%\bin\Qt5Core.dll %install%\
-xcopy %qt_dir%\bin\Qt5OpenGL.dll %install%\
-xcopy %qt_dir%\bin\Qt5Quick.dll %install%\
-xcopy %qt_dir%\bin\Qt5PrintSupport.dll %install%\
-xcopy %qt_dir%\bin\Qt5Qml.dll %install%\
-xcopy %qt_dir%\bin\Qt5Sql.dll %install%\
-xcopy %qt_dir%\bin\Qt5Positioning.dll %install%\
-xcopy %qt_dir%\bin\Qt5Gui.dll %install%\
-xcopy %qt_dir%\bin\Qt5Widgets.dll %install%\
-xcopy %qt_dir%\bin\Qt5Network.dll %install%\
-xcopy %qt_dir%\bin\Qt5QuickWidgets.dll %install%\
-xcopy %qt_dir%\bin\Qt5WebEngine.dll %install%\
-xcopy %qt_dir%\bin\Qt5WebEngineCore.dll %install%\
-xcopy %qt_dir%\bin\Qt5WebChannel.dll %install%\
-xcopy %qt_dir%\bin\Qt5WebEngineWidgets.dll %install%\
-xcopy %qt_dir%\bin\Qt5Multimedia.dll %install%\
-xcopy %qt_dir%\bin\Qt5MultimediaWidgets.dll %install%\
-xcopy %qt_dir%\bin\Qt5Sensors.dll %install%\
+xcopy Simulationcraft.exe %install%\
 
-xcopy %qt_dir%\bin\libGLESv2.dll %install%\
-xcopy %qt_dir%\bin\icudt52.dll %install%\
-xcopy %qt_dir%\bin\icuin52.dll %install%\
-xcopy %qt_dir%\bin\icuuc52.dll %install%\
-xcopy %qt_dir%\bin\libEGL.dll %install%\
-xcopy %qt_dir%\bin\D3DCompiler_47.dll %install%\
 
-xcopy %qt_dir%\plugins\platforms\qminimal.dll %install%\platforms\
-xcopy %qt_dir%\plugins\platforms\qwindows.dll %install%\platforms\
-
+:: Run windeployqt tool to create dependencies
+%qt_dir%\bin\windeployqt.exe %install%\Simulationcraft.exe
 
 :: Copy other relevant files for windows release
 xcopy Welcome.html %install%\
 xcopy Welcome.png %install%\
-xcopy Simulationcraft.exe %install%\
 xcopy simc64.exe %install%\
 xcopy READ_ME_FIRST.txt %install%\
 xcopy Examples.simc %install%\
