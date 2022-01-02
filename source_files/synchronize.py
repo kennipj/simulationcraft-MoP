@@ -77,9 +77,6 @@ def VS_use_precompiled_header( filename ):
             return "" #"<PrecompiledHeader />"
           else:
             return VS_no_precompiled_header()
-            
-    print "could not open file for precompiled header settings!"
-    return ""
         
 def VS_header_str( filename, gui ):
 	if gui:

@@ -9,9 +9,9 @@
 :: Qt-Framework: C:\Qt\Qt5.3.1\
 
 :: Update the qt_dir as necessary
-set qt_dir=C:\Qt\qt5.3.1\5.3\msvc2013_64
+set qt_dir=C:\Qt\5.9.9\msvc2017_64
 set install=simc-win64-release
-set redist="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\redist\x64\Microsoft.VC120.CRT"
+set redist="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT"
 
 :: IMPORTANT NOTE FOR DEBUGGING
 :: This script will ONLY copy the optimized Qt dlls
@@ -25,9 +25,9 @@ rd %install% /s /q
 :: Copying new dlls
 
 xcopy %qt_dir%\plugins\imageformats %install%\imageformats\
-xcopy %redist%\msvcp120.dll %install%\
-xcopy %redist%\msvcr120.dll %install%\
-xcopy %redist%\vccorlib120.dll %install%\
+xcopy %redist%\msvcp140.dll %install%\
+:: xcopy %redist%\msvcr120.dll %install%\
+xcopy %redist%\vccorlib140.dll %install%\
 xcopy %qt_dir%\bin\Qt5Core.dll %install%\
 xcopy %qt_dir%\bin\Qt5OpenGL.dll %install%\
 xcopy %qt_dir%\bin\Qt5Quick.dll %install%\
@@ -38,8 +38,11 @@ xcopy %qt_dir%\bin\Qt5Positioning.dll %install%\
 xcopy %qt_dir%\bin\Qt5Gui.dll %install%\
 xcopy %qt_dir%\bin\Qt5Widgets.dll %install%\
 xcopy %qt_dir%\bin\Qt5Network.dll %install%\
-xcopy %qt_dir%\bin\Qt5WebKit.dll %install%\
-xcopy %qt_dir%\bin\Qt5WebKitWidgets.dll %install%\
+xcopy %qt_dir%\bin\Qt5QuickWidgets.dll %install%\
+xcopy %qt_dir%\bin\Qt5WebEngine.dll %install%\
+xcopy %qt_dir%\bin\Qt5WebEngineCore.dll %install%\
+xcopy %qt_dir%\bin\Qt5WebChannel.dll %install%\
+xcopy %qt_dir%\bin\Qt5WebEngineWidgets.dll %install%\
 xcopy %qt_dir%\bin\Qt5Multimedia.dll %install%\
 xcopy %qt_dir%\bin\Qt5MultimediaWidgets.dll %install%\
 xcopy %qt_dir%\bin\Qt5Sensors.dll %install%\
