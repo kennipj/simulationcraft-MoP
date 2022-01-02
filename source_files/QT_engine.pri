@@ -11,6 +11,7 @@
  HEADERS += engine/util/timeline.hpp
  HEADERS += engine/util/rng.hpp
  HEADERS += engine/util/sc_io.hpp
+ HEADERS += engine/util/json.hpp
  HEADERS += engine/dbc/specialization.hpp
  HEADERS += engine/dbc/dbc.hpp
  HEADERS += engine/dbc/data_enums.hh
@@ -48,6 +49,7 @@
  SOURCES += engine/sim/sc_scaling.cpp
  SOURCES += engine/sim/sc_sim.cpp
  SOURCES += engine/sim/sc_core_sim.cpp
+ SOURCES += engine/report/charts.cpp
  SOURCES += engine/report/sc_report_html_player.cpp
  SOURCES += engine/report/sc_report_html_sim.cpp
  SOURCES += engine/report/sc_report_text.cpp

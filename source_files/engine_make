@@ -10,6 +10,7 @@ SRC += \
     util$(PATHSEP)timeline.hpp \
     util$(PATHSEP)rng.hpp \
     util$(PATHSEP)sc_io.hpp \
+    util$(PATHSEP)json.hpp \
     dbc$(PATHSEP)specialization.hpp \
     dbc$(PATHSEP)dbc.hpp \
     dbc$(PATHSEP)data_enums.hh \
@@ -47,6 +48,7 @@ SRC += \
     sim$(PATHSEP)sc_scaling.cpp \
     sim$(PATHSEP)sc_sim.cpp \
     sim$(PATHSEP)sc_core_sim.cpp \
+    report$(PATHSEP)charts.cpp \
     report$(PATHSEP)sc_report_html_player.cpp \
     report$(PATHSEP)sc_report_html_sim.cpp \
     report$(PATHSEP)sc_report_text.cpp \
