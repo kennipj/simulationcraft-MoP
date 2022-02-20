@@ -4618,10 +4618,6 @@ namespace { // unnamed namespace
 
 		double mastery_value = mastery_spells.master_demonologist->ok() ? cache.mastery_value() : 0.0;
 
-		if (buffs.dark_soul->up() && sets.has_set_bonus(SET_T14_4PC_CASTER))
-		{
-			m *= 1.0 + sets.set(SET_T14_4PC_CASTER)->effectN(1).percent();
-		}
 
 		if (buffs.metamorphosis->up()) // FIXME: Is corruption an exception, or did they change it so it only applies to a few spells specifically?
 		{
@@ -4632,7 +4628,7 @@ namespace { // unnamed namespace
 			m *= 1.0 + mastery_value;
 		}
 
-		if (sets.has_set_bonus(SET_T14_4PC_CASTER) && buffs.tier14_4pc_raging_soul->up())
+		if (buffs.tier14_4pc_raging_soul->up())
 			m *= 1.0 + buffs.tier14_4pc_raging_soul->data().effectN(1).percent();
 
 		if (buffs.tier16_2pc_fiery_wrath->up())
