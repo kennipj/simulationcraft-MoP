@@ -84,6 +84,8 @@ namespace { // unnamed namespace
 			buff_t* demonic_rebirth;
 			buff_t* mannoroths_fury;
 
+			buff_t* tier14_4pc_raging_soul;
+
 			buff_t* tier16_4pc_ember_fillup;
 			buff_t* tier16_2pc_destructive_influence;
 			buff_t* tier16_2pc_empowered_grasp;
@@ -3579,6 +3581,9 @@ namespace { // unnamed namespace
 				warlock_spell_t::execute();
 
 				p()->buffs.dark_soul->trigger();
+
+				if (p()->sets.has_set_bonus(SET_T14_4PC_CASTER))
+					p()->buffs.tier14_4pc_raging_soul->trigger();
 			}
 
 			virtual bool ready()
@@ -4613,6 +4618,11 @@ namespace { // unnamed namespace
 
 		double mastery_value = mastery_spells.master_demonologist->ok() ? cache.mastery_value() : 0.0;
 
+		if (buffs.dark_soul->up() && sets.has_set_bonus(SET_T14_4PC_CASTER))
+		{
+			m *= 1.0 + sets.set(SET_T14_4PC_CASTER)->effectN(1).percent();
+		}
+
 		if (buffs.metamorphosis->up()) // FIXME: Is corruption an exception, or did they change it so it only applies to a few spells specifically?
 		{
 			m *= 1.0 + spec.demonic_fury->effectN(1).percent() * 3 + mastery_value * 3;
@@ -4622,10 +4632,14 @@ namespace { // unnamed namespace
 			m *= 1.0 + mastery_value;
 		}
 
+		if (sets.has_set_bonus(SET_T14_4PC_CASTER) && buffs.tier14_4pc_raging_soul->up())
+			m *= 1.0 + buffs.tier14_4pc_raging_soul->data().effectN(1).percent();
+
 		if (buffs.tier16_2pc_fiery_wrath->up())
 		{
 			m *= 1.0 + buffs.tier16_2pc_fiery_wrath->value();
 		}
+
 		return m;
 	}
 
@@ -5047,6 +5061,8 @@ namespace { // unnamed namespace
 			.cd(timespan_t::zero());
 		buffs.demonic_rebirth = buff_creator_t(this, "demonic_rebirth", find_spell(88448)).cd(find_spell(89140)->duration());
 		buffs.mannoroths_fury = buff_creator_t(this, "mannoroths_fury", talents.mannoroths_fury);
+		buffs.tier14_4pc_raging_soul = buff_creator_t(this, "tier14_4pc_raging_soul", find_spell(148463))
+			.add_invalidate(CACHE_PLAYER_DAMAGE_MULTIPLIER);
 		buffs.tier16_4pc_ember_fillup = buff_creator_t(this, "ember_master", find_spell(145164))
 			.cd(find_spell(145165)->duration())
 			.add_invalidate(CACHE_CRIT);
